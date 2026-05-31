@@ -1,0 +1,32 @@
+name: Manual Test Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      should_fail:
+        description: "Should this workflow fail?"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print test info
+        run: |
+          echo "Running manual test workflow"
+          echo "should_fail=${{ github.event.inputs.should_fail }}"
+
+      - name: Pass or fail intentionally
+        run: |
+          if [ "${{ github.event.inputs.should_fail }}" = "true" ]; then
+            echo "Failing intentionally"
+            exit 1
+          else
+            echo "Passing intentionally"
+          fi
